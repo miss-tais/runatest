@@ -284,4 +284,8 @@ class CategoryAPITest(APITestCase):
         self.assertTrue('name' in response.data)
 
     def test_empty_data_errors(self):
-        pass
+        response = self.client.post('/categories/', data={})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        self.assertTrue('name' in response.data)
+
