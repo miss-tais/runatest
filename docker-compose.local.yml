@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  django:
+    restart: always
+    container_name: runatest-django
+    build:
+      context: .
+      dockerfile: ./web/compose/local/Dockerfile
+    command: python /web/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - '.:/src/app'
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.django.local
+    depends_on:
+      - postgres
+
+  postgres:
+    restart: always
+    container_name: runatest-postgres
+    image: postgres:latest
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data/
+    env_file:
+      - .env.postgres.local
+    ports:
+      - "5432:5432"
+
+volumes:
+  local_pgdata:
